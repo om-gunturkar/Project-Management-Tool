@@ -1,9 +1,17 @@
+// db.js
+
 import mongoose from "mongoose";
 
-export const connectDB=async ()=>{
-    await mongoose.connect('mongodb+srv://omgunturkar_PMT:projectManagement@cluster0.qvhfpbf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-    .then(()=>{
-        console.log("DB Connected")
+// Get the connection string from the environment variables
+const dbUri = process.env.MONGO_URI;
+
+export const connectDB = async () => {
+    // Pass the environment variable to mongoose.connect
+    await mongoose.connect(dbUri)
+    .then(() => {
+        console.log("DB Connected");
     })
-    
+    .catch((error) => {
+        console.error("DB Connection Error:", error);
+    });
 }
