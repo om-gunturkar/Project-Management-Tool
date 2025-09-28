@@ -1,0 +1,158 @@
+/* -------------------------------------------------------------------------- */
+/* Custom CSS for Dark Theme and Gradient Border */
+/* -------------------------------------------------------------------------- */
+
+/* Define the custom properties for the dark theme */
+:root {
+    --bg-page: #1f2937; /* Dark background */
+    --bg-card: #111827; /* Very dark card color */
+    --text-primary: #f9fafb; /* Light text for visibility */
+    --text-secondary: #9ca3af; /* Subdued text color */
+    --bg-input: #374151; /* Dark input background */
+    --border-input: #4b5563; /* Dark input border */
+    --color-primary-accent: #60a5fa; /* Blue accent */
+    --color-secondary-accent: #4ade80; /* Green accent */
+    --color-primary-dark: #3b82f6; /* Deeper blue for hover/focus */
+}
+
+/* Outer page background container */
+.login-page-container {
+    min-height: 100vh;
+    width: 100vw; /* Ensure it takes full viewport width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-page);
+    z-index: 1;
+}
+
+/* 1. Gradient Border Container */
+.login-card-border {
+    position: relative;
+    /* max-width is controlled in the JSX (max-w-md) */
+    background-color: var(--bg-card);
+    border-radius: 0.75rem; /* rounded-xl */
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); 
+}
+
+/* Create the gradient border using the mask technique */
+.login-card-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px; /* Border thickness */
+    border-radius: 0.75rem; 
+    background: linear-gradient(to bottom right, var(--color-primary-accent), var(--color-secondary-accent));
+    
+    /* Masking to only show the gradient along the edge */
+    -webkit-mask: 
+        linear-gradient(var(--bg-card) 0 0) content-box, 
+        linear-gradient(var(--bg-card) 0 0);
+    mask: 
+        linear-gradient(var(--bg-card) 0 0) content-box, 
+        linear-gradient(var(--bg-card) 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 0; 
+}
+
+/* 2. Inner Content Wrapper */
+.login-card-content {
+    position: relative;
+    z-index: 10;
+}
+
+/* Header Text Styles */
+.login-title {
+    color: var(--text-primary);
+}
+.login-subtitle {
+    color: var(--text-secondary);
+}
+
+/* Icon (LogIn) background color */
+.icon-circle {
+    background: linear-gradient(to bottom right, var(--color-primary-accent), var(--color-secondary-accent));
+}
+
+/* Input Wrapper Styling */
+.input-wrapper-dark {
+    /* REDUCED vertical padding to make input shorter */
+    padding: 0.5rem 0.75rem; 
+    
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-input);
+    border-radius: 0.5rem;
+    
+    /* Ensure flex alignment is centered for input and icon */
+    display: flex;
+    align-items: center;
+}
+/* Input icon color */
+.input-wrapper-dark svg {
+    color: var(--color-primary-accent) !important;
+    flex-shrink: 0; /* Prevents icon from shrinking */
+}
+/* Input field styling */
+.input-wrapper-dark input {
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+    /* Ensure the input fills the space but doesn't force height */
+        border: none; /* <-- REMOVE internal border on the input element */
+    outline: none; /* <-- Remove browser's default focus outline */
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    height: auto; /* Use natural height */
+    line-height: 1.5; /* Standard line height */
+    flex-grow: 1; /* Allows input to take up available space */
+}
+
+/* Password toggle button/icon */
+.password-toggle {
+    color: var(--text-secondary);
+    /* Ensure it aligns nicely */
+    display: flex;
+    align-items: center;
+}
+.password-toggle:hover {
+    color: var(--color-primary-accent);
+}
+
+
+/* Checkbox and Label styling */
+.checkbox-input {
+    background-color: var(--bg-input);
+    border-color: var(--border-input);
+    color: var(--color-primary-accent) !important;
+}
+.checkbox-label {
+    color: var(--text-secondary);
+}
+
+
+/* Submit Button Gradient */
+.button-gradient-dark {
+    background-image: linear-gradient(to bottom right, #3b82f6, #10b981); 
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.button-gradient-dark:hover {
+    transform: scale(1.05);
+    background-image: linear-gradient(to bottom right, #60a5fa, #4ade80);
+}
+.button-gradient-dark:focus {
+    box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--color-primary-accent);
+}
+
+/* Link color */
+.login-link-text {
+    color: var(--text-secondary);
+}
+.login-switch-button {
+    color: var(--color-primary-accent) !important;
+    text-decoration: underline;
+}
+.login-switch-button:hover {
+    color: var(--color-primary-dark) !important;
+    text-decoration: underline;
+}
