@@ -12,7 +12,7 @@ const port = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-
+const allowedOrigins = ['https://project-management-tool-murex.vercel.app/']; // REPLACE with your actual Vercel/Netlify URL
 //DB connect
 connectDB();
 
@@ -28,3 +28,16 @@ app.listen(port,()=>{
     console.log(`Server started on http://localhost:${port}`);
     
 })
+
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true); 
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true // Important for sending cookies/sessions
+}));
