@@ -2,9 +2,9 @@ import { User, Mail, Lock, LogIn } from 'lucide-react';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
-import { BUTTONCLASSES, INPUTWRAPPER } from '../assets/dummy';
+import { INPUTWRAPPER, PRIMARY_BUTTON } from '../assets/dummy';
 import 'react-toastify/dist/ReactToastify.css';
-import './Login.css'; // Reuse same styles
+import './Login.css';
 
 // Initial empty form
 const INITIAL_FORM = { name: "", email: "", password: "" };
@@ -13,10 +13,8 @@ const SignUp = ({ onSubmit, onSwitchMode }) => {
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Backend URL (update if needed)
   const url = "http://localhost:4000";
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -30,11 +28,9 @@ const SignUp = ({ onSubmit, onSwitchMode }) => {
 
       toast.success("Signed up successfully!");
 
-      // Optionally trigger parent callback (if provided)
       onSubmit?.(data.user);
-
-      // Reset form
       setFormData(INITIAL_FORM);
+
     } catch (err) {
       const msg = err.response?.data?.message || err.message || "Signup failed";
       toast.error(msg);
@@ -44,7 +40,6 @@ const SignUp = ({ onSubmit, onSwitchMode }) => {
     }
   };
 
-  // Fields for dynamic rendering
   const FIELDS = [
     { name: "name", type: "text", placeholder: "Full Name", icon: User },
     { name: "email", type: "email", placeholder: "Email", icon: Mail },
@@ -53,11 +48,13 @@ const SignUp = ({ onSubmit, onSwitchMode }) => {
 
   return (
     <div className="login-page-container">
+
       <div className="max-w-md w-full login-card-border">
         <div className="login-card-content p-8">
 
           <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
 
+          {/* Header */}
           <div className="mb-6 text-center">
             <div className="icon-circle w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4">
               <User className="w-8 h-8 text-white" />
@@ -66,36 +63,42 @@ const SignUp = ({ onSubmit, onSwitchMode }) => {
             <p className="login-subtitle text-sm mt-1">Sign up to continue to TaskFlow</p>
           </div>
 
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
+
             {FIELDS.map(({ name, type, placeholder, icon: Icon }) => (
-              <div key={name} className={`${INPUTWRAPPER} input-wrapper-dark`}>
-                <Icon className="w-5 h-5 mr-2" />
+              <div key={name} className={INPUTWRAPPER}>
+                <Icon className="w-5 h-5 mr-2 text-white" />
                 <input
                   type={type}
                   placeholder={placeholder}
                   value={formData[name]}
                   onChange={(e) => setFormData({ ...formData, [name]: e.target.value })}
-                  className="w-full focus-outline-none text-sm"
+                  className="w-full bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm"
                   required
                 />
               </div>
             ))}
 
+            {/* Button */}
             <button
               type="submit"
-              className={`${BUTTONCLASSES} button-gradient-dark text-white font-semibold flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2`}
+              className={`w-full ${PRIMARY_BUTTON}`}
               disabled={loading}
             >
               {loading ? (
                 "Signing Up..."
               ) : (
                 <>
-                  <LogIn className="w-4 h-4 mr-2" /> Sign Up
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Sign Up
                 </>
               )}
             </button>
+
           </form>
 
+          {/* Footer */}
           <p className="text-center login-link-text text-sm mt-6">
             Already Have An Account?{" "}
             <button
@@ -106,8 +109,10 @@ const SignUp = ({ onSubmit, onSwitchMode }) => {
               Login
             </button>
           </p>
+
         </div>
       </div>
+
     </div>
   );
 };

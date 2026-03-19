@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { baseControlClasses, DEFAULT_TASK, priorityStyles } from '../assets/dummy'
-import { AlignLeft, Calendar, CheckCircle, Flag, Plus, PlusCircle, Save, X } from 'lucide-react'
+import { baseControlClasses, DEFAULT_TASK } from '../assets/dummy'
+import { AlignLeft, Calendar, CheckCircle, Flag, PlusCircle, Save, X } from 'lucide-react'
+import { PRIMARY_BUTTON } from '../assets/dummy'
 
 const API_BASE = 'http://localhost:4000/api/tasks'
 
@@ -35,7 +36,7 @@ const TaskModal = ({ isOpen, onClose, taskToEdit, onSave, onLogout }) => {
             ...prev,
             [name]: value
         }));
-    }, [])
+    }, []);
 
     const getHeaders = useCallback(() => {
         const token = localStorage.getItem('token');
@@ -43,8 +44,8 @@ const TaskModal = ({ isOpen, onClose, taskToEdit, onSave, onLogout }) => {
         return {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
-        }
-    }, [])
+        };
+    }, []);
 
     const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
@@ -63,16 +64,18 @@ const TaskModal = ({ isOpen, onClose, taskToEdit, onSave, onLogout }) => {
                 headers: getHeaders(),
                 body: JSON.stringify(taskData)
             });
+
             if (!resp.ok) {
                 if (resp.status === 401) return onLogout?.();
                 const err = await resp.json();
                 throw new Error(err.message || 'Failed to save task');
             }
+
             const saved = await resp.json();
             onSave?.(saved);
             onClose();
         } catch (err) {
-            console.error(err)
+            console.error(err);
             setError(err.message || 'An error occurred while saving the task');
         } finally {
             setLoading(false);
@@ -82,63 +85,103 @@ const TaskModal = ({ isOpen, onClose, taskToEdit, onSave, onLogout }) => {
     if (!isOpen) return null;
 
     return (
-        <div className='fixed inset-0 backdrop-blur-sm bg-black/20 z-50 flex items-center justify-center p-4'>
-            <div className='bg-white border border-[#1FA2FF]/20 rounded-xl max-w-md w-full shadow-lg relative p-6 animate-fadeIn'>
+        <div className='fixed inset-0 backdrop-blur-sm bg-black/60 z-50 flex items-center justify-center p-4'>
+            <div className='bg-gray-900 border border-gray-700 rounded-xl max-w-md w-full shadow-2xl relative p-6 text-white animate-fadeIn'>
+
+                {/* Header */}
                 <div className='flex justify-between items-center mb-6'>
-                    <h2 className='text-2xl font-bold text-[#2B2B2B] flex items-center gap-2'>
+                    <h2 className='text-2xl font-bold text-white flex items-center gap-2'>
                         {taskData.id ? <Save className='text-[#1FA2FF] w-5 h-5' /> :
                             <PlusCircle className='text-[#1FA2FF] w-5 h-5' />}
                         {taskData.id ? 'Edit Task' : 'Add New Task'}
                     </h2>
 
-                    <button onClick={onClose} className='p-2 hover:bg-[#E0F7FF] rounded-lg transition-colors text-gray-500 hover:text-[#1FA2FF]'>
+                    <button onClick={onClose} className="p-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors duration-200">
                         <X className='w-5 h-5' />
                     </button>
                 </div>
 
+                {/* Form */}
                 <form onSubmit={handleSubmit} className='space-y-4'>
-                    {error && <div className='text-red-500 text-sm bg-red-50 rounded-lg border border-red-100'>{error}</div>}
+
+                    {/* Error */}
+                    {error && (
+                        <div className='bg-red-900/30 border border-red-500 text-red-300 text-sm rounded-lg p-2'>
+                            {error}
+                        </div>
+                    )}
+
+                    {/* Title */}
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-1'>Task Title</label>
-                        <div className='flex items-center border border-[#1FA2FF]/20 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-[#1FA2FF] focus-within:border-[#1FA2FF] transition-all duration-200'>
-                            <input type="text" name="title" required value={taskData.title} onChange={handleChange} className='w-full focus:outline-none text-sm bg-white text-gray-900 border-gray-300' placeholder='Enter Task Title' />
+                        <label className='block text-sm font-medium text-gray-300 mb-1'>Task Title</label>
+                        <div className='flex items-center border border-gray-700 bg-gray-800 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-orange-500'>
+                            <input
+                                type="text"
+                                name="title"
+                                required
+                                value={taskData.title}
+                                onChange={handleChange}
+                                className='w-full bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm'
+                                placeholder='Enter Task Title'
+                            />
                         </div>
                     </div>
 
+                    {/* Description */}
                     <div>
-                        <label className='flex items-center gap-1 text-sm font-medium text-gray-700 mb-1'>
+                        <label className='flex items-center gap-1 text-sm font-medium text-gray-300 mb-1'>
                             <AlignLeft className='w-4 h-4 text-[#1FA2FF]' />
                             Description
                         </label>
-                        <textarea name="description" rows="3"
-                            onChange={handleChange} value={taskData.description}
-                            className={`${baseControlClasses} bg-white text-gray-900 border-gray-300`} placeholder='Add Details About Your Tasks'
-                        ></textarea>
+                        <textarea
+                            name="description"
+                            rows="3"
+                            onChange={handleChange}
+                            value={taskData.description}
+                            className={`${baseControlClasses} bg-gray-800 text-white border-gray-700 placeholder-gray-400`}
+                            placeholder='Add Details About Your Tasks'
+                        />
                     </div>
 
+                    {/* Priority + Date */}
                     <div className='grid grid-cols-2 gap-4'>
                         <div>
-                            <label className='flex items-center gap-1 text-sm font-medium text-gray-700 mb-1'>
+                            <label className='flex items-center gap-1 text-sm font-medium text-gray-300 mb-1'>
                                 <Flag className='w-4 h-4 text-[#1FA2FF]' />
                                 Priority
                             </label>
-                            <select name="priority" value={taskData.priority} onChange={handleChange} className={`${baseControlClasses} ${priorityStyles[taskData.priority]}`}>
+                            <select
+                                name="priority"
+                                value={taskData.priority}
+                                onChange={handleChange}
+                                className='bg-gray-800 text-white border border-gray-700 rounded-lg px-3 py-2'
+                            >
                                 <option>Low</option>
                                 <option>Medium</option>
                                 <option>High</option>
                             </select>
                         </div>
+
                         <div>
-                            <label className='flex items-center gap-1 text-sm font-medium text-gray-700 mb-1'>
+                            <label className='flex items-center gap-1 text-sm font-medium text-gray-300 mb-1'>
                                 <Calendar className='w-4 h-4 text-[#1FA2FF]' />
                                 Due Date
                             </label>
-                            <input type="date" name="dueDate" required min={today} value={taskData.dueDate} onChange={handleChange} className={`${baseControlClasses} bg-white text-gray-900 border-gray-300`} />
+                            <input
+                                type="date"
+                                name="dueDate"
+                                required
+                                min={today}
+                                value={taskData.dueDate}
+                                onChange={handleChange}
+                                className={`${baseControlClasses} bg-gray-800 text-white border-gray-700`}
+                            />
                         </div>
                     </div>
 
+                    {/* Status */}
                     <div>
-                        <label className='flex items-center gap-1 text-sm font-medium text-gray-700 mb-2'>
+                        <label className='flex items-center gap-1 text-sm font-medium text-gray-300 mb-2'>
                             <CheckCircle className='w-4 h-4 text-[#1FA2FF]' />
                             Status
                         </label>
@@ -146,21 +189,34 @@ const TaskModal = ({ isOpen, onClose, taskToEdit, onSave, onLogout }) => {
                             {[{ val: 'Yes', label: 'Completed' },
                             { val: 'No', label: 'In Progress' }
                             ].map(({ val, label }) => (
-                                <label key={val} className='flex items-center '>
-                                    <input type='radio' name='completed' value={val} checked={taskData.completed === val} onChange={handleChange} className='h-4 w-4 text-[#1FA2FF] focus:ring-[#1FA2FF] border-gray-300 rounded' />
-                                    <span className='ml-2 text-sm text-gray-700'>{label}</span>
+                                <label key={val} className='flex items-center'>
+                                    <input
+                                        type='radio'
+                                        name='completed'
+                                        value={val}
+                                        checked={taskData.completed === val}
+                                        onChange={handleChange}
+                                        className='h-4 w-4 text-[#1FA2FF] focus:ring-[#1FA2FF] border-gray-600 bg-gray-800'
+                                    />
+                                    <span className='ml-2 text-sm text-gray-300'>{label}</span>
                                 </label>
                             ))}
                         </div>
                     </div>
 
-                    <button type='submit' disabled={loading}
-                        className='w-full bg-gradient-to-r from-[#1FA2FF] via-[#12D8FA] to-[#A6FFCB] text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 hover:shadow-md transition-all duration-200'>
-                        {loading ? 'Saving ...' : (taskData.id ? <>
-                            <Save className='w-4 h-4' /> Update task
-                        </> : <>
-                            <PlusCircle className='w-4 h-4' /> Create task
-                        </>)}
+                    {/* Submit */}
+                    <button
+                        type='submit'
+                        disabled={loading}
+                        className={`w-full ${PRIMARY_BUTTON}`}
+                    >
+                        {loading ? 'Saving ...' : (
+                            taskData.id ? <>
+                                <Save className='w-4 h-4' /> Update task
+                            </> : <>
+                                <PlusCircle className='w-4 h-4' /> Create task
+                            </>
+                        )}
                     </button>
                 </form>
             </div>

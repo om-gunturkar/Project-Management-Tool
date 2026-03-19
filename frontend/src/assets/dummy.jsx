@@ -1,3 +1,6 @@
+
+
+
 import {
     User, Mail, Home,
     ListChecks,
@@ -12,6 +15,9 @@ import {
 
 // BACKEND TEST 
 // DUMMY DATA
+export const PRIMARY_BUTTON =
+    "bg-gradient-to-r from-orange-600 to-orange-400 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 hover:scale-[1.02] hover:shadow-lg transition-all duration-200 disabled:opacity-50";
+
 const backendDummy = [
     {
         title: "Buy groceries",
@@ -47,7 +53,7 @@ const backendDummy = [
 
 // assets/formConstants.js
 export const baseControlClasses =
-    "w-full px-4 py-2.5 border border-green-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm";
+    "w-full px-4 py-2.5 bg-gray-800 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm transition";
 
 export const priorityStyles = {
     Low: "bg-green-50 text-green-700 border-green-200",
@@ -67,7 +73,7 @@ export const DEFAULT_TASK = {
 
 // LOGIN CSS
 export const INPUTWRAPPER =
-    "flex items-center border border-green-100 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-green-500 focus-within:border-green-500 transition-all duration-200"
+    "flex items-center bg-gray-800 border border-orange-500/40 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-orange-500 transition-all duration-200"
 export const BUTTON_CLASSES =
     "w-full bg-gradient-to-r from-fuchsia-500 to-green-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2"
 
@@ -152,12 +158,16 @@ export const getPriorityColor = (priority) => {
 }
 
 export const getPriorityBadgeColor = (priority) => {
-    const colors = {
-        low: "bg-green-100 text-green-900",
-        medium: "bg-green-100 text-green-900",
-        high: "bg-fuchsia-300 text-fuchsia-900",
+    switch (priority) {
+        case 'Low':
+            return 'bg-green-100 text-green-800 border-green-300'
+        case 'Medium':
+            return 'bg-yellow-100 text-yellow-800 border-yellow-300'
+        case 'High':
+            return 'bg-red-100 text-red-800 border-red-300'
+        default:
+            return 'bg-gray-100 text-gray-800'
     }
-    return colors[priority?.toLowerCase()] || "bg-gray-100 text-gray-700"
 }
 
 // DASHBOARD
@@ -265,21 +275,35 @@ export const MENU_OPTIONS = [
 
 // CSS class groups for TaskItem
 export const TI_CLASSES = {
-    wrapper: "group p-4 sm:p-5 rounded-xl shadow-sm bg-white border-l-4 hover:shadow-md transition-all duration-300 border border-green-100",
+    wrapper: "group p-4 sm:p-5 rounded-xl shadow-md bg-gray-900 border border-gray-700 hover:shadow-lg transition-all duration-300",
+
     leftContainer: "flex items-start gap-2 sm:gap-3 flex-1 min-w-0",
-    completeBtn: "mt-0.5 sm:mt-1 p-1 sm:p-1.5 rounded-full hover:bg-green-100 transition-colors duration-300",
+
+    completeBtn: "mt-0.5 sm:mt-1 p-1 sm:p-1.5 rounded-full hover:bg-gray-700 transition-colors duration-300",
+
     checkboxIconBase: "w-4 h-4 sm:w-5 sm:h-5",
-    titleBase: "text-base sm:text-lg font-medium truncate",
+
+    titleBase: "text-base sm:text-lg font-medium truncate text-white",
+
     priorityBadge: "text-xs px-2 py-0.5 rounded-full shrink-0",
-    description: "text-sm text-gray-500 mt-1 truncate",
-    subtasksContainer: "mt-3 sm:mt-4 space-y-2 sm:space-y-3 bg-green-50/30 p-2 sm:p-3 rounded-lg border border-green-100",
-    progressBarBg: "h-1.5 bg-green-100 rounded-full overflow-hidden",
-    progressBarFg: "h-full bg-gradient-to-r from-fuchsia-500 to-green-600 transition-all duration-300",
+
+    description: "text-sm text-gray-400 mt-1 truncate",
+
+    subtasksContainer: "mt-3 sm:mt-4 space-y-2 sm:space-y-3 bg-gray-800 p-2 sm:p-3 rounded-lg border border-gray-700",
+
+    progressBarBg: "h-1.5 bg-gray-700 rounded-full overflow-hidden",
+
+    progressBarFg: "h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300",
+
     rightContainer: "flex flex-col items-end gap-2 sm:gap-3",
-    menuButton: "p-1 sm:p-1.5 hover:bg-green-100 rounded-lg text-gray-500 hover:text-green-700 transition-colors duration-200",
-    menuDropdown: "absolute right-0 mt-1 w-40 sm:w-48 bg-white border border-green-100 rounded-xl shadow-lg z-10 overflow-hidden animate-fadeIn",
-    dateRow: "flex items-center gap-1.5 text-xs font-medium whitespace-nowrap",
-    createdRow: "flex items-center gap-1.5 text-xs text-gray-400 whitespace-nowrap",
+
+    menuButton: "p-1 sm:p-1.5 hover:bg-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors duration-200",
+
+    menuDropdown: "absolute right-0 mt-1 w-40 sm:w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-lg z-10 overflow-hidden",
+
+    dateRow: "flex items-center gap-1.5 text-xs font-medium whitespace-nowrap text-gray-400",
+
+    createdRow: "flex items-center gap-1.5 text-xs text-gray-500 whitespace-nowrap",
 }
 // APP.JSX
 const data = { name: 'John Doe' };

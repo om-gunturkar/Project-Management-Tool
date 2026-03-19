@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
-import { BUTTONCLASSES, INPUTWRAPPER } from '../assets/dummy';
+import { BUTTONCLASSES, INPUTWRAPPER, PRIMARY_BUTTON } from '../assets/dummy';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Import the custom CSS file
@@ -136,22 +136,22 @@ const Login = ({ onSubmit, onSwitchMode }) => {
           <form onSubmit={handleSubmit} className='space-y-4'>
             {FIELDS.map(({ name, type, placeholder, icon: Icon, isPassword }) => (
               // Combining imported INPUTWRAPPER with custom dark theme class
-              <div className={`${INPUTWRAPPER} input-wrapper-dark`} key={name}>
+              <div className={`${INPUTWRAPPER} `} key={name}>
                 {/* Icon classes are now solely for size/spacing, color is CSS-managed */}
-                <Icon className='w-5 h-5 mr-2' />
+                <Icon className='w-5 h-5 mr-2 text-white' />
                 <input
                   type={isPassword && showPassword ? "text" : type}
                   placeholder={placeholder}
                   value={formData[name]}
                   onChange={(e) => setFormData({ ...formData, [name]: e.target.value })}
                   // Input styles managed by CSS, only functional classes remain
-                  className='w-full focus-outline-none text-sm'
+                  className='w-full focus-outline-none text-sm text-white'
                   required
                 />
 
                 {isPassword && (
-                  <button type='button' onClick={() => setShowPassword((prev) => (!prev))} className="password-toggle ml-2 transition-colors">
-                    {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
+                  <button type='button' onClick={() => setShowPassword((prev) => (!prev))} className="password-toggle text-white ml-2 transition-colors">
+                    {showPassword ? <EyeOff className='w-5 h-5 text-white' /> : <Eye className='w-5 h-5 text-white' />}
                   </button>
                 )}
               </div>
@@ -167,7 +167,7 @@ const Login = ({ onSubmit, onSwitchMode }) => {
             <button
               type='submit'
               // Combining imported BUTTONCLASSES with custom dark gradient class
-              className={`${BUTTONCLASSES} button-gradient-dark text-white font-semibold flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2`}
+              className={`w-full ${PRIMARY_BUTTON}`}
               disabled={loading}
             >
               {loading ? (

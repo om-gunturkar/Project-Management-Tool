@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react'
-import { ADD_BUTTON, EMPTY_STATE, FILTER_LABELS, FILTER_OPTIONS, FILTER_WRAPPER, HEADER, ICON_WRAPPER, LABEL_CLASS, SELECT_CLASSES, STAT_CARD, STATS, STATS_GRID, TAB_ACTIVE, TAB_BASE, TAB_INACTIVE, TABS_WRAPPER, VALUE_CLASS, WRAPPER } from '../assets/dummy'
+import { ADD_BUTTON, EMPTY_STATE, FILTER_LABELS, FILTER_OPTIONS, FILTER_WRAPPER, HEADER, ICON_WRAPPER, LABEL_CLASS, PRIMARY_BUTTON, SELECT_CLASSES, STAT_CARD, STATS, STATS_GRID, TAB_ACTIVE, TAB_BASE, TAB_INACTIVE, TABS_WRAPPER, VALUE_CLASS, WRAPPER } from '../assets/dummy'
 import { HomeIcon, Plus, Icon, Filter, Calendar } from 'lucide-react'
 import { useOutletContext } from 'react-router-dom'
 import TaskItem from '../components/TaskItem'
@@ -73,7 +73,7 @@ const Dashboard = () => {
           </h1>
           <p className='text-sm text-gray-300 mt-1 ml-7 truncate'>Manage Your Tasks Efficiently</p>
         </div>
-        <button onClick={() => setShowModal(true)} className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-lg flex items-center gap-1 transition">
+        <button onClick={() => setShowModal(true)} className={`${PRIMARY_BUTTON}`}>
           <Plus size={18} /> Add New Task
         </button>
       </div>
@@ -103,7 +103,7 @@ const Dashboard = () => {
         {/* FILTER */}
         <div className={FILTER_WRAPPER}>
           <div className="flex items-center gap-2 min-h-0">
-            <Filter className='w-5 h-5 text-blue-400 shrink-0' />
+            <Filter className='w-5 h-5 text-orange-400 shrink-0' />
             <h2 className='text-base md:text-lg font-semibold text-white truncate'>
               {FILTER_LABELS[filter]}
             </h2>
@@ -129,7 +129,7 @@ const Dashboard = () => {
           {filteredTasks.length === 0 ? (
             <div className="text-center bg-slate-800 p-6 rounded-xl">
               <div className="flex justify-center">
-                <div className="bg-blue-500 hover:bg-blue-600 p-3 rounded-full">
+                <div className={`${PRIMARY_BUTTON} p-3 rounded-full`}>
                   <Calendar className="w-8 h-8 text-white" />
                 </div>
               </div>
@@ -137,9 +137,7 @@ const Dashboard = () => {
                 No Tasks Found
               </h3>
               <p className='text-sm text-gray-300 mb-4'>{filter === "all" ? "Create your first tasks to get started" : "No task"}</p>
-              <button onClick={() => setShowModal(true)} className="bg-blue-500  cursor-pointer hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">
-                Add New Task
-              </button>
+
             </div>
           ) : (
             filteredTasks.map(task => (
@@ -159,8 +157,8 @@ const Dashboard = () => {
         {/* ADD Task Desktop */}
         <div
           onClick={() => setShowModal(true)}
-          className="hidden md:flex items-center justify-center p-4 border-2 border-dashed border-blue-300 rounded-xl hover:border-blue-500 bg-slate-800 cursor-pointer transition-colors">
-          <Plus className='w-5 h-5 text-blue-400 mr-2' />
+          className="hidden md:flex items-center justify-center p-4 border-2 border-dashed border-orange-400 hover:border-orange-500 bg-slate-800 cursor-pointer transition-colors rounded-xl">
+          <Plus className='w-5 h-5 text-orange-400 mr-2' />
           <span className='text-white font-medium'>Add New Tasks</span>
         </div>
       </div>
