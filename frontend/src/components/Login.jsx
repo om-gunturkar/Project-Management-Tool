@@ -16,7 +16,18 @@ const Login = ({ onSubmit, onSwitchMode }) => {
   const [formData, setFormData] = useState(INITIAL_FORM)
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email")
+    const savedPassword = localStorage.getItem("password")
 
+    if (savedEmail && savedPassword) {
+      setFormData({
+        email: savedEmail,
+        password: savedPassword
+      })
+      setRememberMe(true)
+    }
+  }, [])
   const navigate = useNavigate()
   const url = "http://localhost:4000"
 
@@ -50,28 +61,38 @@ const Login = ({ onSubmit, onSwitchMode }) => {
 
   // Add a placeholder useEffect to avoid warnings if axios/url were only used above
   useEffect(() => {
-      // You can keep this empty or add other necessary mount logic here.
-      // For now, we leave it empty to ensure the login page stays put.
-  }, []); 
-  
+    // You can keep this empty or add other necessary mount logic here.
+    // For now, we leave it empty to ensure the login page stays put.
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!rememberMe) {
-      toast.error('Yours Must enable "Remember Me" to login.')
-      return
-    }
     setLoading(true)
+
     try {
       const { data } = await axios.post(`${url}/api/user/login`, formData)
+
       if (!data.token) throw new Error(data.message || "Login Failed")
 
       localStorage.setItem("token", data.token)
       localStorage.setItem("userId", data.user.id)
+
+      // ✅ Remember Me logic
+      if (rememberMe) {
+        localStorage.setItem("email", formData.email)
+        localStorage.setItem("password", formData.password)
+      } else {
+        localStorage.removeItem("email")
+        localStorage.removeItem("password")
+      }
+
       setFormData(INITIAL_FORM)
+
       onSubmit?.({ token: data.token, userId: data.user.id, ...data.user })
-      toast.success("Login Successfull ! Redirecting ...")
-      // This is the intended redirect that happens ONLY after successful login
-      setTimeout(() => navigate('/'), 1000) 
+
+      toast.success("Login Successful! Redirecting ...")
+      setTimeout(() => navigate('/'), 1000)
+
     } catch (err) {
       const msg = err.response?.data?.message || err.message
       toast.error(msg)
@@ -92,11 +113,11 @@ const Login = ({ onSubmit, onSwitchMode }) => {
 
   return (
     // Applied the main page background class
-    <div className='login-page-container'> 
-      
+    <div className='login-page-container'>
+
       {/* Login Card with custom border class */}
       <div className='max-w-md w-full login-card-border'>
-        
+
         {/* Inner wrapper for content and padding */}
         <div className='login-card-content p-8'>
 
@@ -118,14 +139,14 @@ const Login = ({ onSubmit, onSwitchMode }) => {
               <div className={`${INPUTWRAPPER} input-wrapper-dark`} key={name}>
                 {/* Icon classes are now solely for size/spacing, color is CSS-managed */}
                 <Icon className='w-5 h-5 mr-2' />
-                <input 
-                  type={isPassword && showPassword ? "text" : type} 
-                  placeholder={placeholder} 
-                  value={formData[name]} 
-                  onChange={(e) => setFormData({ ...formData, [name]: e.target.value })} 
+                <input
+                  type={isPassword && showPassword ? "text" : type}
+                  placeholder={placeholder}
+                  value={formData[name]}
+                  onChange={(e) => setFormData({ ...formData, [name]: e.target.value })}
                   // Input styles managed by CSS, only functional classes remain
-                  className='w-full focus-outline-none text-sm' 
-                  required 
+                  className='w-full focus-outline-none text-sm'
+                  required
                 />
 
                 {isPassword && (
@@ -138,15 +159,15 @@ const Login = ({ onSubmit, onSwitchMode }) => {
 
             <div className="flex items-center">
               {/* Checkbox styling managed by CSS */}
-              <input type="checkbox" id="rememberMe" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} className='checkbox-input h-4 w-4 rounded' required />
+              <input type="checkbox" id="rememberMe" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} className='checkbox-input h-4 w-4 rounded' />
               {/* Label styling managed by CSS */}
               <label htmlFor='rememberMe' className='checkbox-label ml-2 block text-sm'>Remember Me</label>
             </div>
 
-            <button 
-              type='submit' 
+            <button
+              type='submit'
               // Combining imported BUTTONCLASSES with custom dark gradient class
-              className={`${BUTTONCLASSES} button-gradient-dark text-white font-semibold flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2`} 
+              className={`${BUTTONCLASSES} button-gradient-dark text-white font-semibold flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2`}
               disabled={loading}
             >
               {loading ? (

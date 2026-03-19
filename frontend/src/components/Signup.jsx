@@ -1,22 +1,50 @@
 import { User, Mail, Lock, LogIn } from 'lucide-react';
 import React, { useState } from 'react';
+import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { BUTTONCLASSES, INPUTWRAPPER } from '../assets/dummy';
 import 'react-toastify/dist/ReactToastify.css';
-import './Login.css'; // ✅ reuse same styles
+import './Login.css'; // Reuse same styles
 
-const INITIAL_FORM = { name: "", email: "", password: "" }
+// Initial empty form
+const INITIAL_FORM = { name: "", email: "", password: "" };
 
 const SignUp = ({ onSubmit, onSwitchMode }) => {
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  // ✅ Backend URL (update if needed)
+  const url = "http://localhost:4000";
+
+  // Handle form submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success("Signed Up Successfully!");
-    setFormData(INITIAL_FORM);
+    setLoading(true);
+
+    try {
+      const { data } = await axios.post(`${url}/api/user/register`, formData, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!data.success) throw new Error(data.message || "Signup failed");
+
+      toast.success("Signed up successfully!");
+
+      // Optionally trigger parent callback (if provided)
+      onSubmit?.(data.user);
+
+      // Reset form
+      setFormData(INITIAL_FORM);
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message || "Signup failed";
+      toast.error(msg);
+      console.error("Signup Error:", err.response || err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Fields for dynamic rendering
   const FIELDS = [
     { name: "name", type: "text", placeholder: "Full Name", icon: User },
     { name: "email", type: "email", placeholder: "Email", icon: Mail },
@@ -55,10 +83,12 @@ const SignUp = ({ onSubmit, onSwitchMode }) => {
 
             <button
               type="submit"
-              className={`${BUTTONCLASSES} button-gradient-dark text-white font-semibold flex items-center justify-center space-x-2`}
+              className={`${BUTTONCLASSES} button-gradient-dark text-white font-semibold flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2`}
               disabled={loading}
             >
-              {loading ? "Signing Up..." : (
+              {loading ? (
+                "Signing Up..."
+              ) : (
                 <>
                   <LogIn className="w-4 h-4 mr-2" /> Sign Up
                 </>
@@ -68,7 +98,11 @@ const SignUp = ({ onSubmit, onSwitchMode }) => {
 
           <p className="text-center login-link-text text-sm mt-6">
             Already Have An Account?{" "}
-            <button type="button" className="login-switch-button font-medium" onClick={onSwitchMode}>
+            <button
+              type="button"
+              className="login-switch-button font-medium transition-colors"
+              onClick={onSwitchMode}
+            >
               Login
             </button>
           </p>

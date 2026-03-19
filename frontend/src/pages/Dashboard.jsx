@@ -25,7 +25,7 @@ const Dashboard = () => {
     )).length
   }), [tasks]);
 
-  
+
   //FILTER TASKS
   const filteredTasks = useMemo(() => tasks.filter(task => {
     const dueDate = new Date(task.DueDate);
