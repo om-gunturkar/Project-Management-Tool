@@ -50,9 +50,9 @@ export const baseControlClasses =
     "w-full px-4 py-2.5 border border-green-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm";
 
 export const priorityStyles = {
-    Low: "bg-green-100 text-green-700 border-green-200",
-    Medium: "bg-green-100 text-green-700 border-green-200",
-    High: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200",
+    Low: "bg-green-50 text-green-700 border-green-200",
+    Medium: "bg-yellow-50 text-yellow-700 border-yellow-200",
+    High: "bg-red-50 text-red-700 border-red-200",
 };
 
 // data/defaultTask.js
@@ -175,7 +175,7 @@ export const LABEL_CLASS = "text-xs text-gray-500 truncate"
 
 // Stats definitions
 export const STATS = [
-    { key: "total", label: "Total Tasks", icon: HomeIcon, iconColor: "bg-blue-100 text-blue-600", valueKey: "total", gradient: true,borderColor: "border-blue-500",textColor: "text-blue-600"  },
+    { key: "total", label: "Total Tasks", icon: HomeIcon, iconColor: "bg-blue-100 text-blue-600", valueKey: "total", gradient: true, borderColor: "border-blue-500", textColor: "text-blue-600" },
     { key: "lowPriority", label: "Low Priority", icon: Flame, iconColor: "bg-green-100 text-green-600", borderColor: "border-green-500", valueKey: "lowPriority", textColor: "text-green-600" },
     { key: "mediumPriority", label: "Medium Priority", icon: Flame, iconColor: "bg-orange-100 text-orange-600", borderColor: "border-orange-500", valueKey: "mediumPriority", textColor: "text-orange-600" },
     { key: "highPriority", label: "High Priority", icon: Flame, iconColor: "bg-red-100 text-red-600", borderColor: "border-red-500", valueKey: "highPriority", textColor: "text-red-600" },
@@ -284,6 +284,6 @@ export const TI_CLASSES = {
 // APP.JSX
 const data = { name: 'John Doe' };
 const user = {
-      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || 'User')}&background=random`
-    };
+    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || 'User')}&background=random`
+};
 

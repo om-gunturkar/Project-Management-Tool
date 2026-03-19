@@ -101,7 +101,7 @@ const TaskModal = ({ isOpen, onClose, taskToEdit, onSave, onLogout }) => {
                     <div>
                         <label className='block text-sm font-medium text-gray-700 mb-1'>Task Title</label>
                         <div className='flex items-center border border-[#1FA2FF]/20 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-[#1FA2FF] focus-within:border-[#1FA2FF] transition-all duration-200'>
-                            <input type="text" name="title" required value={taskData.title} onChange={handleChange} className='w-full focus:outline-none text-sm' placeholder='Enter Task Title' />
+                            <input type="text" name="title" required value={taskData.title} onChange={handleChange} className='w-full focus:outline-none text-sm bg-white text-gray-900 border-gray-300' placeholder='Enter Task Title' />
                         </div>
                     </div>
 
@@ -112,7 +112,7 @@ const TaskModal = ({ isOpen, onClose, taskToEdit, onSave, onLogout }) => {
                         </label>
                         <textarea name="description" rows="3"
                             onChange={handleChange} value={taskData.description}
-                            className={baseControlClasses} placeholder='Add Details About Your Tasks'
+                            className={`${baseControlClasses} bg-white text-gray-900 border-gray-300`} placeholder='Add Details About Your Tasks'
                         ></textarea>
                     </div>
 
@@ -133,7 +133,7 @@ const TaskModal = ({ isOpen, onClose, taskToEdit, onSave, onLogout }) => {
                                 <Calendar className='w-4 h-4 text-[#1FA2FF]' />
                                 Due Date
                             </label>
-                            <input type="date" name="dueDate" required min={today} value={taskData.dueDate} onChange={handleChange} className={baseControlClasses} />
+                            <input type="date" name="dueDate" required min={today} value={taskData.dueDate} onChange={handleChange} className={`${baseControlClasses} bg-white text-gray-900 border-gray-300`} />
                         </div>
                     </div>
 
